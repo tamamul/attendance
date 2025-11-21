@@ -13,20 +13,33 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Setup Java
+
+      # --- Java 17 untuk SDK manager ---
+      - name: Setup Java 17 (for sdkmanager)
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+
+      # --- Java 8 untuk Gradle build ---
+      - name: Setup Java 8 (for old Gradle)
         uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: 8
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v3
 
       - name: Make gradlew executable
         run: chmod +x ./gradlew
 
       - name: Build Release APK
         run: ./gradlew assembleRelease
+
 
       - name: Upload APK
         uses: actions/upload-artifact@v4
