@@ -1,0 +1,28 @@
+name: build-android-app
+
+on: push: branches: - master
+
+jobs: build: runs-on: ubuntu-latest
+
+steps:
+  - name: Checkout code
+    uses: actions/checkout@v4
+
+  - name: Set up JDK 8 (required for old Android SDK)
+    uses: actions/setup-java@v4
+    with:
+      distribution: 'temurin'
+      java-version: '8'
+
+  - name: Install Android SDK
+    uses: android-actions/setup-android@v3
+
+  - name: Build APK
+    run: |
+      ./gradlew assembleRelease
+
+  - name: Upload APK Artifact
+    uses: actions/upload-artifact@v4
+    with:
+      name: attendance-app-apk
+      path: app/build/outputs/apk/release/app-release.apk
